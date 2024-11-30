@@ -32,7 +32,14 @@ class Main {
 		}, 0, 1000);
 	}
 	
-	// base(without special rules)
+	/**
+	 * safe lottery (make sure the pool is always to be positive. or make sure the pool is always increasing when it is negative)
+	 * @param pool the pool of money
+	 * @param weights the probability weight of the items
+	 * @param times the times of the bets
+	 * @param bets the bets on each item
+	 * @return a array typed long which contains the index of the item and the amount of money to be decreased to the pool
+	 */
 	private static long[] safeLottery(long pool, int[] weights, int[] times, long[] bets) {
     int rm = weights.length;
 		long sc = 0;
@@ -53,7 +60,6 @@ class Main {
 		do {
 			System.out.println("rm: " + rm);
 			int idx = Math.abs(Arrays.binarySearch(weightSum, (int) (Math.random() * weightSum[rm - 1])));
-			System.out.println("idx: " + idx);
 			ae = aes[idx - 1];
 			sc = scs[ae];
 			if (sc < minSc) {
@@ -86,6 +92,15 @@ class Main {
 		return res;
 	}
 
+	/**
+	 * safe lottery with special rules (make sure the pool is always to be positive. or make sure the pool is always increasing when it is negative)
+	 * when result area equals to 8 or 9, the cost of pool is calculated by the sum of the bets of the first 4 or the last 4 items
+	 * @param pool the pool of money
+	 * @param weights the probability weight of the items
+	 * @param times the times of the bets
+	 * @param bets the bets on each item
+	 * @return a array typed long which contains the index of the item and the amount of money to be decreased to the pool
+	 */
 	private static long[] safeLotteryWithSpecialRules(long pool, int[] weights, int[] times, long[] bets) {
     int rm = weights.length;
 		long sc = 0;
@@ -116,14 +131,8 @@ class Main {
 			totalWeight += weights[i];
     }
 		do {
-			System.out.println("rm: " + rm);
-			for(int i = 0; i < weightSum.length; i += 1) {
-				System.out.println("weightSum[" + i + "]: " + weightSum[i]);
-			}
 			int randomN = (int) (Math.random() * weightSum[rm - 1] + 1);
-			System.out.println("randomN: " + randomN);
 			int idx = Math.abs(Arrays.binarySearch(weightSum, randomN));
-			System.out.println("idx: " + idx);
 			ae = aes[idx - 1];
 			sc = scs[ae];
 			if (sc < minSc) {
