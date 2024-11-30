@@ -16,9 +16,9 @@ class Main {
 			public void run() {
 				System.out.println("============ new round start ============");
 				System.out.println("pool: " + pool);
-				long[] bets = { 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000 };
+				long[] bets = { 3000, 2000, 2000, 2000, 0, 6000, 6000, 6000 };
 				for (int i = 0; i < 8; i += 1) {
-					bets[i] = ((int) (Math.random() * 50) + 1) * 100;
+					// bets[i] = ((int) (Math.random() * 50) + 1) * 100;
 					pool.addAndGet(bets[i]);
 					System.out.printf("the bet %d is %d\n", i, bets[i]);
 				}
@@ -30,6 +30,9 @@ class Main {
 				System.out.println("============ new round end ============");
 			}
 		}, 0, 1000);
+		// long[] bets = { 3000, 2000, 2000, 2000, 0, 6000, 6000, 6000 };
+		// long[] res = safeLotteryWithSpecialRules(pool.get(), weights, times, bets);
+		// System.out.println(res[0] + " " + res[1]);
 	}
 	
 	/**
@@ -69,10 +72,9 @@ class Main {
 			if (sc > pool) { // remove item on index ae
 				int prevTotalWeight = totalWeight;
 				totalWeight -= weights[ae];
-				for (int i = ae; i < rm - 1; i += 1) {
-					aes[i] = aes[i + 1];
-					scs[i] = scs[i + 1];
-					if (i != rm - 1) {
+				for (int i = idx - 1; i < aes.length - 1; i += 1) { 
+					aes[i] = aes[i + 1]; 
+					if (i < rm - 1) {
 						weightSum[i + 1] = weightSum[i + 2];
 					}
 				}
@@ -142,10 +144,9 @@ class Main {
 			if (sc > pool) { // remove item on index ae
 				int prevTotalWeight = totalWeight;
 				totalWeight -= weights[ae];
-				for (int i = ae; i < rm - 1; i += 1) {
-					aes[i] = aes[i + 1];
-					scs[i] = scs[i + 1];
-					if (i != rm - 1) {
+				for (int i = idx - 1; i < aes.length - 1; i += 1) { 
+					aes[i] = aes[i + 1]; 
+					if (i < rm - 1) {
 						weightSum[i + 1] = weightSum[i + 2];
 					}
 				}
