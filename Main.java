@@ -62,7 +62,7 @@ class Main {
     }
 		do {
 			System.out.println("rm: " + rm);
-			int idx = Math.abs(Arrays.binarySearch(weightSum, (int) (Math.random() * weightSum[rm - 1])));
+			int idx = Math.abs(Arrays.binarySearch(weightSum, (int) (Math.random() * weightSum[rm])));
 			ae = aes[idx - 1];
 			sc = scs[ae];
 			if (sc < minSc) {
@@ -108,6 +108,7 @@ class Main {
 		long sc = 0;
 		int ae = 0;
 		int totalWeight = 0;
+		int runCount = 0;
 		long minSc = Long.MAX_VALUE;
 		int minScAe = 0;
 		int[] weightSum = new int[rm + 1];
@@ -131,12 +132,19 @@ class Main {
 				}
 			}
 			totalWeight += weights[i];
+			System.out.printf("the aes[%d] is %d\n", i, aes[i]);
     }
+		
 		do {
-			int randomN = (int) (Math.random() * weightSum[rm - 1] + 1);
-			int idx = Math.abs(Arrays.binarySearch(weightSum, randomN));
-			ae = aes[idx - 1];
+			runCount += 1;
+			int randomN = (int) (Math.random() * weightSum[rm]); // 0 ~ totalWeight
+			int _idx = Arrays.binarySearch(weightSum, randomN);
+			int idx = _idx < 0 ? -_idx - 1 : _idx;
+			System.out.printf("the randomN is %d, the idx is %d\n", randomN, idx);
+			if (idx != 0) idx -= 1;
+			ae = aes[idx]; 
 			sc = scs[ae];
+			System.out.printf("the ae is %d, the sc is %d \n", ae, sc);
 			if (sc < minSc) {
 				minSc = sc;
 				minScAe = ae;
@@ -144,7 +152,7 @@ class Main {
 			if (sc > pool) { // remove item on index ae
 				int prevTotalWeight = totalWeight;
 				totalWeight -= weights[ae];
-				for (int i = idx - 1; i < aes.length - 1; i += 1) { 
+				for (int i = idx; i < aes.length - 1; i += 1) { 
 					aes[i] = aes[i + 1]; 
 					if (i < rm - 1) {
 						weightSum[i + 1] = weightSum[i + 2];
@@ -157,6 +165,7 @@ class Main {
 				rm -= 1;
 			}
 		} while (rm > 0 && sc > pool);
+		System.out.printf("the runCount is %d\n", runCount);
 		if (sc > pool) {
 			ae = minScAe;
 			sc = minSc;
